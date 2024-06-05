@@ -60,6 +60,7 @@ function buildCharts(sample) {
     let trace1 = [{
       x: otuIds,
       y: sampleValues,
+      text: otuLabels,
       mode: "markers",
       marker: {
         color: otuIds,
