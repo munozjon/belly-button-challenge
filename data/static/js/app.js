@@ -1,24 +1,22 @@
 // Build the metadata panel
-var globaldata = [];
+var globalData = [];
 
 function buildMetadata(sample) {
   //d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
-    let data = globaldata[0];
+    let data = globalData[0];
 
     console.log(sample)
 
     // get the metadata field
     let metadata = data.metadata;
 
-    //console.log(metadata);
-
     // Filter the metadata for the object with the desired sample number
     function getSample(dataset) {
         return dataset.id === parseInt(sample);
     };
 
-    let filteredMetadata = metadata.filter(getSample);
+    let filteredMetadata = metadata.filter(results => results.id == parseInt(sample));
 
     //console.log("HELLO")
     //console.log(filteredMetadata);
@@ -46,19 +44,19 @@ function buildMetadata(sample) {
       .style("font-weight", function (d) { return "bold"})
       .html(function (d) {
         return `<h6>id: ${d.id}</h6>
-                <h6>ethnicity: ${d.ethnicity}</h6>`
+                <h6>ethnicity: ${d.ethnicity}</h6>
+                <h6>gender: ${d.gender}</h6>`
       });
 
-  //});
+  // });
 };
 
-//console.log(buildMetadata(943));
 
 // function to build both charts
 function buildCharts(sample) {
   //d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
-    let data = globaldata[0];
+    let data = globalData[0];
 
     // Get the samples field
     let samples = data.samples;
@@ -68,7 +66,7 @@ function buildCharts(sample) {
       return dataset.id === sample;
     };
 
-    let filteredSample = samples.filter(getSample);
+    let filteredSample = samples.filter(results => results.id == sample);
 
     // Get the otu_ids, otu_labels, and sample_values
     let otuIds = filteredSample[0].otu_ids;
@@ -126,7 +124,7 @@ function buildCharts(sample) {
     // Render the Bar Chart
     Plotly.newPlot("bar", trace2, layout2);
 
-  //});
+  // });
 }
 
 
@@ -135,12 +133,10 @@ function buildCharts(sample) {
 function init() {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
-
-    globaldata.push(data);
+  globalData.push(data);
 
     // Get the names field
     let names = data.names;
-
 
     // Use d3 to select the dropdown with id of `#selDataset`
     d3.select("select")
