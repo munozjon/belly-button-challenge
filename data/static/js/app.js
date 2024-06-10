@@ -1,12 +1,6 @@
 // Build the metadata panel
-var globalData = [];
-
 function buildMetadata(sample) {
-  //d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
-
-    let data = globalData[0];
-
-    console.log(sample)
+  d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
     // get the metadata field
     let metadata = data.metadata;
@@ -18,24 +12,15 @@ function buildMetadata(sample) {
 
     let filteredMetadata = metadata.filter(results => results.id == parseInt(sample));
 
-    //console.log("HELLO")
-    //console.log(filteredMetadata);
 
     // Use d3 to select the panel with id of `#sample-metadata`
-    //let sampleMetadata = d3.select("#sample-metadata");
 
     // Use `.html("") to clear any existing metadata
-    //let htmlMetadata = sampleMetadata.html("");
 
     // Inside a loop, you will need to use d3 to append new
     // tags for each key-value in the filtered metadata.
-    //for (key in filteredMetadata) {
 
-      //htmlMetadata("h6").append(key, filteredMetadata[key]);
-
-    //};
-
-    d3.select(".card-body")
+    d3.select("#sample-metadata")
       .selectAll("div")
       .data(filteredMetadata)
       .enter()
@@ -43,20 +28,23 @@ function buildMetadata(sample) {
       .classed("panel-body", true)
       .style("font-weight", function (d) { return "bold"})
       .html(function (d) {
-        return `<h6>id: ${d.id}</h6>
-                <h6>ethnicity: ${d.ethnicity}</h6>
-                <h6>gender: ${d.gender}</h6>`
+        return `<h6>ID: ${d.id}</h6>
+                <h6>ETHNICITY: ${d.ethnicity}</h6>
+                <h6>GENDER: ${d.gender}</h6>
+                <h6>AGE: ${d.age}</h6>
+                <h6>location: ${d.location}</h6>
+                <h6>BBTYPE: ${d.bbtype}</h6>
+                <h6>WFREQ: ${d.wfreq}</h6>`
       });
 
-  // });
+  });
 };
 
 
 // function to build both charts
 function buildCharts(sample) {
-  //d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
+  d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
-    let data = globalData[0];
 
     // Get the samples field
     let samples = data.samples;
@@ -89,7 +77,9 @@ function buildCharts(sample) {
 
     let layout1 = {
       title: "Bacteria Cultures Per Sample",
-    }
+      xaxis: {title: "OTU ID"},
+      yaxis: {title: "Number of Bacteria"}
+    };
 
     // Render the Bubble Chart
     Plotly.newPlot("bubble", trace1, layout1);
@@ -117,6 +107,7 @@ function buildCharts(sample) {
 
     let layout2 = {
       title: "Top 10 Bacteria Cultures Found",
+      xaxis: {title: 'Number of Bacteria'},
       yaxis: {autorange: 'reversed'}
 
     };
@@ -124,7 +115,7 @@ function buildCharts(sample) {
     // Render the Bar Chart
     Plotly.newPlot("bar", trace2, layout2);
 
-  // });
+  });
 }
 
 
@@ -133,41 +124,43 @@ function buildCharts(sample) {
 function init() {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
-  globalData.push(data);
-
     // Get the names field
     let names = data.names;
 
     // Use d3 to select the dropdown with id of `#selDataset`
-    d3.select("select")
-      .selectAll("option")
-      .data(names)
-      .enter()
-      .append("option")
-      .text(function (d) {return d;})
-      .attr("value", function (d) { return d; })
 
     // Use the list of sample names to populate the select options
     // Hint: Inside a loop, you will need to use d3 to append a new
     // option for each sample name.
 
+    d3.select("#selDataset")
+      .selectAll("option")
+      .data(names)
+      .enter()
+      .append("option")
+      .text(function (d) {return d;})
+      .attr("value", function (d) { return d; });
 
     // Get the first sample from the list
+    let firstSample = names[0];
 
+    // console.log(d3.selectAll("option").value()); //.select("option").text());
 
     // Build charts and metadata panel with the first sample
-    buildMetadata(940);
-    buildCharts("940");
+    buildMetadata(firstSample);
+    buildCharts(firstSample);
+
   });
 }
 
 // Function for event listener
 function optionChanged(newSample) {
+
   // Build charts and metadata panel each time a new sample is selected
   d3.select(".card-body").selectAll("div").remove();
   buildMetadata(newSample);
   buildCharts(newSample);
-}
+};
 
 // Initialize the dashboard
 init();
