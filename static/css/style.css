@@ -1,8 +1,4 @@
-body {
-    padding: 0;
-    margin: 0;
-  }
-  
+/* Change the background color for the 'Demographic Info' card header */
 .card-header,
 html {
   background-color: steelblue;

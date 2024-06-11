@@ -12,22 +12,15 @@ function buildMetadata(sample) {
 
     let filteredMetadata = metadata.filter(results => results.id == parseInt(sample));
 
-
     // Use d3 to select the panel with id of `#sample-metadata`
-
-    // Use `.html("") to clear any existing metadata
-
-    // Inside a loop, you will need to use d3 to append new
-    // tags for each key-value in the filtered metadata.
-
     d3.select("#sample-metadata")
       .selectAll("div")
-      .data(filteredMetadata)
+      .data(filteredMetadata) // Reference the data to add to the 'div'
       .enter()
-      .append("div")
+      .append("div") // Append the data to the 'div' tag
       .classed("panel-body", true)
       .style("font-weight", function (d) { return "bold"})
-      .html(function (d) {
+      .html(function (d) { // Adds a new tag for each key-value in the filtered metadata
         return `<h6>ID: ${d.id}</h6>
                 <h6>ETHNICITY: ${d.ethnicity}</h6>
                 <h6>GENDER: ${d.gender}</h6>
@@ -84,12 +77,12 @@ function buildCharts(sample) {
     // Render the Bubble Chart
     Plotly.newPlot("bubble", trace1, layout1);
 
-    // For the Bar Chart, map the otu_ids to a list of strings for your yticks
     
     // Build a Bar Chart
     // Don't forget to slice and reverse the input data appropriately
     let sortedSampleValues = filteredSample.sort((a, b) => b.sample_values - a.sample_values);
 
+    // For the Bar Chart, map the otu_ids to a list of strings for your yticks
     let mappedIds = sortedSampleValues[0].otu_ids.map(ids => `OTU ${ids.toString()}`).slice(0,10);
 
     let mappedLabels = sortedSampleValues[0].otu_labels.map(labels => labels).slice(0,10);
@@ -126,25 +119,18 @@ function init() {
 
     // Get the names field
     let names = data.names;
-
+    
     // Use d3 to select the dropdown with id of `#selDataset`
-
-    // Use the list of sample names to populate the select options
-    // Hint: Inside a loop, you will need to use d3 to append a new
-    // option for each sample name.
-
     d3.select("#selDataset")
       .selectAll("option")
-      .data(names)
+      .data(names) // Reference the names to populate the select options
       .enter()
-      .append("option")
-      .text(function (d) {return d;})
+      .append("option") // Append the names as their own 'options'
+      .text(function (d) {return d;}) 
       .attr("value", function (d) { return d; });
 
     // Get the first sample from the list
     let firstSample = names[0];
-
-    // console.log(d3.selectAll("option").value()); //.select("option").text());
 
     // Build charts and metadata panel with the first sample
     buildMetadata(firstSample);
@@ -157,7 +143,7 @@ function init() {
 function optionChanged(newSample) {
 
   // Build charts and metadata panel each time a new sample is selected
-  d3.select(".card-body").selectAll("div").remove();
+  d3.select(".card-body").selectAll("div").remove(); // Removes the previous demographic data
   buildMetadata(newSample);
   buildCharts(newSample);
 };
