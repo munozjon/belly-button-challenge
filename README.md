@@ -1,5 +1,8 @@
 # belly-button-challenge
 
+## GitHub Pages
+https://munozjon.github.io/belly-button-challenge/
+
 ## Module 14 Challenge
 For this challenge, I built an interactive dashboard using the data form the Belly Button Biodiversity dataset (https://robdunnlab.com/projects/belly-button-biodiversity/). This dataset catalogs microbes that colonize human navels. I utilized JavaScript, HTML, and CSS to develop a visual webpage where a bar chart, bubble chart, and an informational table are displayed.
 
